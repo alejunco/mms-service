@@ -1,9 +1,30 @@
 {
   "name": "mms",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/bin/server.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "NODE_ENV=development npm-run-all server",
+    "lint": "eslint src",
+    "server": "babel-node ./src/bin/server",
+    "watch": "nodemon"
+  },
   "dependencies": {
+    "express": "^4.16.4",
     "twilio": "^3.31.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "dotenv": "^8.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "nodemon": "^1.19.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.1"
   }
 }
