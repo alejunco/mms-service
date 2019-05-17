@@ -1,12 +1,10 @@
 import Twilio from 'twilio';
-import { __param } from 'tslib';
 
 class TwilioService {
   constructor() {
     this.twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
     this.twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-    this.twilioApiKey = process.env.TWILIO_API_KEY;
-    this.twilioApiSecret = process.env.TWILIO_API_SECRET;
+    this.twilioTestPhoneNumber = process.env.TWILIO_TEST_GENERIC_PHONE_NUMBER;
 
     this.twilioClient = Twilio(this.twilioAccountSid, this.twilioAuthToken);
   }
@@ -17,12 +15,24 @@ class TwilioService {
    * @param {string} body message content
    * @param {array|undefined} media collection of media to send as SMS
    */
-  async sendSms(from, to, body, media) {
+  async sendSms(from = this.twilioTestPhoneNumber, to, body, media) {
     try {
       console.log(`sending to ${to}`);
       return this.twilioClient.messages.create({ from, to, body, mediaUrl: media });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async receiveSms(request, h) {
+    try {
+      const conversation = await Conversation.loadByPhoneNumber(request.payload.To);
+      const senderInfo = { phoneNumber: request.payload.From };
+      const twilioInboundSmsPayload = request.payload;
+
+      await conversation.sendMessage(twilioInboundSmsPayload.Body, { senderInfo });
+    } catch (error) {
+      captureException(error);
     }
   }
 }

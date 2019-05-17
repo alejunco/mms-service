@@ -1,0 +1,26 @@
+✔ How can we send attachments from Merge to another user during a claim conversation within Merge? @done(19-05-17 13:14)
+    - This can be achieve by adding `mediaUrl` when creating a new message with twilio api, witch can be an array or just a single string url, `twilioClient.messages.create({ ..., mediaUrl: mediaUrls, ... })`.
+    - When sending attachments, we're going to upload them to s3 and use the media processing project to get the public urls. Once we have those urls available we can use it to send them in a message. 
+
+✔ How can we receive media from another user during during a claim conversation within Merge? @done(19-05-17 13:14)
+    - When receiving a message with attachments the `NumMedia` field come within the payload witch represent the total amount of media files coming in the message. Then within the payload yo can find `MediaUrl${i}` | `0 <= i` && `i <= NumMedia-1`.
+    - With the urls we can simply upload them to s3 and have them process as a normal attachment flow.
+
+✔ What is the optimal process to display media within a conversation? Consider that the Twilio is receiving and storing media prior to Merge receiving it and the time it takes for media to be transcoded by Merge. @done(19-05-17 13:14)
+    - The major delay is expected between twilio and the mms-user wether receiving or sending out of his phone. 
+
+✔ Can multiple attachments be sent from Merge at one time? @done(19-05-17 13:14)
+    - Yes, Well not really, although you can send multiple attachments with twilio withing the same message, it will automatically split in as many attachments you're send in, so is actually billing for multiple messages.
+
+✔ What are the costs? @done(19-05-17 13:14)
+    # MMS MESSAGES PER MONTH          MESSAGES RECEIVED       MESSAGES SENT
+    # FIRST 25 MILLION MESSAGES       $ 0.0100                $ 0.0200
+    # NEXT 75 MILLION MESSAGES        $ 0.0090                $ 0.0175
+    # NEXT 150 MILLION MESSAGES       $ 0.0075                $ 0.0150
+    # NEXT 250 MILLION MESSAGES       $ 0.0050                $ 0.0125
+    # NEXT 500 MILLION MESSAGES       $ 0.0045                $ 0.0110
+    # ABOVE 1 BILLION MESSAGES        $ 0.0040                $ 0.0100
+
+✔ What are the service limitations in coverage and media? @done(19-05-17 13:14)
+    - This service is only available within USA and Canada. 
+    - Twilio supports up to 10 MediaUrl attachments, as long as the total size of the message body text and all attachments is less than 5 MB. An MMS message body can be up to 1600 characters long, which equals 4.8KB or roughly 1% of the total size limit.

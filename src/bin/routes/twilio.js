@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
 import asyncWrap from './async-route.wrapper';
-import InviteHandler from '../handlers/core';
+import SMSReceiver from '../handlers/sms';
 
 const router = Router();
 
-router.get(`/invite`, asyncWrap(InviteHandler));
+router.post(`/reply`, asyncWrap(SMSReceiver));
 
 export default router;
